@@ -100,7 +100,7 @@ function Dashboard() {
 
   const startEdit = (task) => {
     setEditingId(task.id);
-    setEditData({ title: task.title, description: task.description, priority: task.priority, due_date: task.due_date });
+    setEditData({ title: task.title, description: task.description, priority: task.priority, due_date: task.due_date ? task.due_date.split('T')[0] : "" });
   };
 
   const handleEditChange = (e) => setEditData({ ...editData, [e.target.name]: e.target.value });
