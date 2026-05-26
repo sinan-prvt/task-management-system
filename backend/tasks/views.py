@@ -52,8 +52,23 @@ class TaskUpdateView(APIView):
 
 
 
+class TaskDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def delete(self, request, pk):
+        try:
+            task = Task.objects.get(pk=pk, user=request.user)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        task.delete()
 
+        return Response(
+            {
+                "message": "Task deleted successfully"
+            },
+            status=status.HTTP_204_NO_CONTENT
+        )
 
 
 
