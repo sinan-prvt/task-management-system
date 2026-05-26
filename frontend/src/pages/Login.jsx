@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../services/api';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -29,10 +30,12 @@ export default function Login() {
       localStorage.setItem('access', response.data.access);
       localStorage.setItem('refresh', response.data.refresh);
       localStorage.setItem('username', formData.username);
+      toast.success('Successfully logged in!');
       navigate('/dashboard');
     } catch (err) {
       console.log(err);
       setError('Invalid Credentials');
+      toast.error('Invalid Credentials');
     } finally {
       setLoading(false);
     }

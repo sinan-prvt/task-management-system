@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 
 import API from "../services/api";
+import toast from "react-hot-toast";
 
 function Dashboard() {
 
@@ -58,7 +59,7 @@ function Dashboard() {
         formData
       );
 
-      alert("Task Created Successfully");
+      toast.success("Task Created Successfully");
 
       setFormData({
         title: "",
@@ -74,7 +75,7 @@ function Dashboard() {
 
       console.log(error);
 
-      alert("Failed to create task");
+      toast.error("Failed to create task");
     }
   };
 
@@ -86,7 +87,7 @@ function Dashboard() {
         `/tasks/delete/${id}/`
       );
 
-      alert("Task Deleted");
+      toast.success("Task Deleted");
 
       fetchTasks();
 
@@ -94,7 +95,7 @@ function Dashboard() {
 
       console.log(error);
 
-      alert("Failed to delete task");
+      toast.error("Failed to delete task");
     }
   };
 
@@ -109,13 +110,16 @@ function Dashboard() {
         }
       );
 
-      fetchTasks();
-
+      if (!task.completed) {
+        toast.success("Task marked as completed!");
+      } else {
+        toast.success("Task marked as pending.");
+      }
     } catch (error) {
 
       console.log(error);
 
-      alert("Failed to update task");
+      toast.error("Failed to update task");
     }
   };
 
@@ -143,13 +147,13 @@ function Dashboard() {
         editData
       );
 
-      alert("Task Updated Successfully");
+      toast.success("Task Updated Successfully");
       setEditingId(null);
       setEditData({});
       fetchTasks();
     } catch (error) {
       console.log(error);
-      alert("Failed to update task");
+      toast.error("Failed to update task");
     }
   };
 

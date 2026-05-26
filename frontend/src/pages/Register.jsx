@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../services/api';
+import toast from 'react-hot-toast';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -29,11 +30,13 @@ export default function Register() {
     
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
+      toast.error('Passwords do not match');
       return;
     }
 
     if (!formData.agreeTerms) {
       setError('You must agree to the Terms and Conditions');
+      toast.error('You must agree to the Terms and Conditions');
       return;
     }
 
@@ -44,11 +47,12 @@ export default function Register() {
 
     try {
       await API.post('/register/', submitData);
-      alert('Registration Successful');
+      toast.success('Registration Successful!');
       navigate('/');
     } catch (err) {
       console.log(err);
       setError('Registration Failed');
+      toast.error('Registration Failed');
     } finally {
       setLoading(false);
     }
