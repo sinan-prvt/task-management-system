@@ -1,0 +1,29 @@
+# Python / Django
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+db.sqlite3
+*.log
+*.pot
+*.py[cod]
+dist/
+build/
+*.egg-info/
+
+# Node / React
+node_modules/
+frontend/dist/
+frontend/.env
+.DS_Store
+*.local
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

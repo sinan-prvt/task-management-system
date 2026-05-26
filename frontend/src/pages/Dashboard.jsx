@@ -23,7 +23,6 @@ function Dashboard() {
 
   const [formData, setFormData] = useState({ title: "", description: "", priority: "Low", due_date: "" });
 
-  // ─── API Calls ────────────────────────────────────────────────────────────
   const fetchTasks = async () => {
     try {
       const response = await API.get("/tasks/list/");
@@ -48,7 +47,6 @@ function Dashboard() {
     fetchProfile();
   }, []);
 
-  // ─── Task Handlers ────────────────────────────────────────────────────────
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
@@ -145,7 +143,6 @@ function Dashboard() {
     toast.success("Tasks exported successfully!");
   };
 
-  // ─── Derived State ────────────────────────────────────────────────────────
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(t => t.completed).length;
   const pendingTasks = totalTasks - completedTasks;

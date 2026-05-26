@@ -12,14 +12,8 @@ export default function Topbar({
   const [showProfile, setShowProfile] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  const handleOutsideClick = (ref, setter) => (e) => {
-    if (ref.current && !ref.current.contains(e.target)) setter(false);
-  };
-
   return (
     <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8 flex-shrink-0">
-
-      {/* Left: Search/Filters or Welcome */}
       {activeTab === 'tasks' ? (
         <div className="flex items-center gap-3 flex-1 max-w-3xl">
           <div className="relative flex-1">
@@ -72,10 +66,8 @@ export default function Topbar({
         </div>
       )}
 
-      {/* Right: Notifications + Profile */}
       <div className="flex items-center gap-6">
 
-        {/* Notifications */}
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
@@ -114,7 +106,6 @@ export default function Topbar({
           )}
         </div>
 
-        {/* Profile */}
         <div className="relative" ref={profileRef}>
           <button
             onClick={() => setShowProfile(!showProfile)}
