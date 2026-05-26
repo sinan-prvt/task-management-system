@@ -187,7 +187,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-[#f4f7f6] flex font-sans text-gray-800">
 
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} pendingTasks={pendingTasks} />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} pendingTasks={pendingTasks} loading={loading} />
 
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
 
@@ -200,6 +200,7 @@ function Dashboard() {
           filterStatus={filterStatus} setFilterStatus={setFilterStatus}
           filterPriority={filterPriority} setFilterPriority={setFilterPriority}
           sortBy={sortBy} setSortBy={setSortBy}
+          loading={loading}
         />
 
         <div className="flex-1 overflow-y-auto p-8">
@@ -237,7 +238,7 @@ function Dashboard() {
           {/* ── Dashboard Tab ── */}
           {activeTab === 'dashboard' && (
             <>
-              <StatsCards totalTasks={totalTasks} completedTasks={completedTasks} pendingTasks={pendingTasks} highPriority={highPriority} />
+              <StatsCards totalTasks={totalTasks} completedTasks={completedTasks} pendingTasks={pendingTasks} highPriority={highPriority} loading={loading} />
 
               {totalTasks > 0 && (
                 <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm mb-8">

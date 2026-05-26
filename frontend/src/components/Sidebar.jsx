@@ -1,4 +1,4 @@
-export default function Sidebar({ activeTab, setActiveTab, pendingTasks }) {
+export default function Sidebar({ activeTab, setActiveTab, pendingTasks, loading }) {
   return (
     <aside className="w-64 bg-white border-r border-gray-100 flex flex-col hidden md:flex">
       <div className="h-20 flex items-center px-8 border-b border-gray-50">
@@ -27,7 +27,11 @@ export default function Sidebar({ activeTab, setActiveTab, pendingTasks }) {
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
               Tasks
-              <span className={`ml-auto py-0.5 px-2 rounded-md text-xs ${activeTab === 'tasks' ? 'bg-green-200 text-green-800' : 'bg-green-100 text-green-700'}`}>{pendingTasks}</span>
+              {loading ? (
+                <span className="ml-auto w-6 h-5 rounded-md bg-green-200/50 animate-pulse"></span>
+              ) : (
+                <span className={`ml-auto py-0.5 px-2 rounded-md text-xs ${activeTab === 'tasks' ? 'bg-green-200 text-green-800' : 'bg-green-100 text-green-700'}`}>{pendingTasks}</span>
+              )}
             </button>
             <button
               onClick={() => setActiveTab('calendar')}
