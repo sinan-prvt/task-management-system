@@ -187,9 +187,9 @@ Frontend will run at: `http://localhost:5173`
 
 The application is deployed live using modern cloud hosting platforms:
 
-- **Frontend:** Deployed on **Vercel** (`https://taskio-sigma.vercel.app/` or similar). Uses Vite build commands to generate a static site.
-- **Backend:** Deployed on **Render.com** (`https://task-management-system-sixe.onrender.com`). Runs using Gunicorn and WhiteNoise for static file serving.
-- **Database:** Hosted on **Neon.tech** (Serverless PostgreSQL). Configured using `dj-database-url` in Django settings.
+- Frontend :- Deployed on Vercel. Uses Vite build commands to generate a static site.
+- Backend :- Deployed on Render.com. Runs using Gunicorn and WhiteNoise for static file serving.
+- Database :- Hosted on Neon.tech (Serverless PostgreSQL). Configured using `dj-database-url` in Django settings.
 
 ---
 
