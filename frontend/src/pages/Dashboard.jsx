@@ -280,36 +280,9 @@ function Dashboard() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {displayedTasks.map(task => {
-                    const priorityClass = task.priority === 'High' ? 'bg-red-50 text-red-600' : task.priority === 'Medium' ? 'bg-yellow-50 text-yellow-600' : 'bg-green-50 text-green-600';
-                    return (
-                      <div key={task.id} className={`p-6 rounded-2xl border ${task.completed ? 'bg-gray-50 border-gray-100 opacity-75' : 'bg-white border-gray-200 shadow-sm'}`}>
-                        <div className="flex justify-between items-start mb-4">
-                          <div>
-                            <h3 className={`text-xl font-bold ${task.completed ? 'text-gray-500 line-through' : 'text-gray-900'}`}>{task.title}</h3>
-                            {isOverdue(task) && <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-bold bg-orange-50 text-orange-600">⚠ Overdue</span>}
-                          </div>
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide ${priorityClass}`}>{task.priority}</span>
-                        </div>
-                        <p className="text-gray-600 mb-6 min-h-[3rem]">{task.description}</p>
-                        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                          <div className="flex items-center gap-2 text-sm font-semibold text-gray-500">
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            {new Date(task.due_date).toLocaleDateString()}
-                          </div>
-                          {task.completed ? (
-                            <span className="text-green-600 font-bold flex items-center gap-1 text-sm">
-                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg> Completed
-                            </span>
-                          ) : (
-                            <span className="text-blue-500 font-bold flex items-center gap-1 text-sm">
-                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> In Progress
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {displayedTasks.map(task => (
+                    <TaskCard key={task.id} task={task} {...taskHandlers} />
+                  ))}
                 </div>
               )}
             </div>
