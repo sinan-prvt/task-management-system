@@ -5,6 +5,8 @@ import API from "../services/api";
 function Dashboard() {
 
   const [tasks, setTasks] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editData, setEditData] = useState({});
 
   const [formData, setFormData] = useState({
     title: "",
@@ -110,6 +112,45 @@ function Dashboard() {
     }
   };
 
+  const startEdit = (task) => {
+    setEditingId(task.id);
+    setEditData({
+      title: task.title,
+      description: task.description,
+      priority: task.priority,
+      due_date: task.due_date,
+    });
+  };
+
+  const handleEditChange = (e) => {
+    setEditData({
+      ...editData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleUpdate = async (id) => {
+    try {
+      await API.put(
+        `/tasks/${id}/`,
+        editData
+      );
+
+      alert("Task Updated Successfully");
+      setEditingId(null);
+      setEditData({});
+      fetchTasks();
+    } catch (error) {
+      console.log(error);
+      alert("Failed to update task");
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditData({});
+  };
+
   useEffect(() => {
 
     fetchTasks();
@@ -204,42 +245,108 @@ function Dashboard() {
                 marginBottom: "15px",
               }}
             >
+              {editingId === task.id ? (
+                <div>
+                  <input
+                    type="text"
+                    name="title"
+                    placeholder="Task Title"
+                    value={editData.title}
+                    onChange={handleEditChange}
+                    style={{ width: "100%", marginBottom: "10px" }}
+                  />
 
-              <h3>{task.title}</h3>
+                  <textarea
+                    name="description"
+                    placeholder="Description"
+                    value={editData.description}
+                    onChange={handleEditChange}
+                    style={{ width: "100%", marginBottom: "10px" }}
+                  />
 
-              <p>{task.description}</p>
+                  <select
+                    name="priority"
+                    value={editData.priority}
+                    onChange={handleEditChange}
+                    style={{ marginRight: "10px", marginBottom: "10px" }}
+                  >
+                    <option value="LOW">Low</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HIGH">High</option>
+                  </select>
 
-              <p>
-                Priority: {task.priority}
-              </p>
+                  <input
+                    type="date"
+                    name="due_date"
+                    value={editData.due_date}
+                    onChange={handleEditChange}
+                    style={{ marginRight: "10px", marginBottom: "10px" }}
+                  />
 
-              <p>
-                Due Date: {task.due_date}
-              </p>
+                  <br />
 
-              <p>
-                Completed:
-                {task.completed ? " Yes" : " No"}
-              </p>
+                  <button
+                    onClick={() => handleUpdate(task.id)}
+                    style={{ marginRight: "10px" }}
+                  >
+                    Save
+                  </button>
 
-              <button
-                onClick={() => handleComplete(task)}
-              >
-                {
-                  task.completed
-                    ? "Mark Pending"
-                    : "Mark Completed"
-                }
-              </button>
+                  <button
+                    onClick={cancelEdit}
+                    style={{ backgroundColor: "#ccc" }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <h3>{task.title}</h3>
 
-              <button
-                onClick={() => handleDelete(task.id)}
-                style={{
-                  marginLeft: "10px",
-                }}
-              >
-                Delete
-              </button>
+                  <p>{task.description}</p>
+
+                  <p>
+                    Priority: {task.priority}
+                  </p>
+
+                  <p>
+                    Due Date: {task.due_date}
+                  </p>
+
+                  <p>
+                    Completed:
+                    {task.completed ? " Yes" : " No"}
+                  </p>
+
+                  <button
+                    onClick={() => handleComplete(task)}
+                  >
+                    {
+                      task.completed
+                        ? "Mark Pending"
+                        : "Mark Completed"
+                    }
+                  </button>
+
+                  <button
+                    onClick={() => startEdit(task)}
+                    style={{
+                      marginLeft: "10px",
+                    }}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(task.id)}
+                    style={{
+                      marginLeft: "10px",
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
 
             </div>
           ))
