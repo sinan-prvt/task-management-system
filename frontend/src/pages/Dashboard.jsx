@@ -79,24 +79,43 @@ function Dashboard() {
     }
   };
 
-  const handleDelete = async (id) => {
-
+  const confirmDelete = async (id) => {
     try {
-
-      await API.delete(
-        `/tasks/delete/${id}/`
-      );
-
+      await API.delete(`/tasks/delete/${id}/`);
       toast.success("Task Deleted");
-
       fetchTasks();
-
     } catch (error) {
-
       console.log(error);
-
       toast.error("Failed to delete task");
     }
+  };
+
+  const handleDelete = (id) => {
+    toast((t) => (
+      <div className="flex flex-col gap-2 p-1">
+        <p className="text-sm font-semibold text-gray-800">Are you sure you want to delete this task?</p>
+        <div className="flex gap-2 justify-end mt-2">
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-1.5 text-xs font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => {
+              toast.dismiss(t.id);
+              confirmDelete(id);
+            }}
+            className="px-4 py-1.5 text-xs font-bold text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors shadow-sm"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: 5000,
+      position: 'top-center'
+    });
   };
 
   const handleComplete = async (task) => {
@@ -160,6 +179,40 @@ function Dashboard() {
   const cancelEdit = () => {
     setEditingId(null);
     setEditData({});
+  };
+
+  const exportToCSV = () => {
+    if (tasks.length === 0) {
+      toast.error("No tasks to export!");
+      return;
+    }
+    
+    const headers = ["Title", "Description", "Priority", "Status", "Due Date", "Created At"];
+    const csvRows = [headers.join(",")];
+    
+    tasks.forEach(task => {
+      const row = [
+        `"${task.title.replace(/"/g, '""')}"`,
+        `"${task.description.replace(/"/g, '""')}"`,
+        task.priority,
+        task.completed ? 'Completed' : 'Pending',
+        task.due_date || 'N/A',
+        new Date(task.created_at || new Date()).toLocaleDateString()
+      ];
+      csvRows.push(row.join(","));
+    });
+    
+    const csvString = csvRows.join("\n");
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `taskio_export_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("Tasks exported successfully!");
   };
 
   const [showProfile, setShowProfile] = useState(false);
@@ -464,13 +517,22 @@ function Dashboard() {
               </p>
             </div>
             {(activeTab === 'dashboard' || activeTab === 'tasks') && (
-              <button
-                onClick={() => setShowAddModal(true)}
-                className="px-5 py-2.5 bg-[#166534] hover:bg-green-800 text-white font-medium rounded-full flex items-center gap-2 shadow-md transition-all"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
-                Add Task
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={exportToCSV}
+                  className="px-5 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium rounded-full flex items-center gap-2 shadow-sm transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                  Export CSV
+                </button>
+                <button
+                  onClick={() => setShowAddModal(true)}
+                  className="px-5 py-2.5 bg-[#166534] hover:bg-green-800 text-white font-medium rounded-full flex items-center gap-2 shadow-md transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
+                  Add Task
+                </button>
+              </div>
             )}
           </div>
 
