@@ -28,6 +28,7 @@ export default function Login() {
       const response = await API.post('/login/', formData);
       localStorage.setItem('access', response.data.access);
       localStorage.setItem('refresh', response.data.refresh);
+      localStorage.setItem('username', formData.username);
       navigate('/dashboard');
     } catch (err) {
       console.log(err);
