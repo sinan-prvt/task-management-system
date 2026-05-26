@@ -7,6 +7,7 @@ import Topbar from "../components/Topbar";
 import StatsCards from "../components/StatsCards";
 import TaskCard from "../components/TaskCard";
 import AddTaskModal from "../components/AddTaskModal";
+import SkeletonCard from "../components/SkeletonCard";
 
 function Dashboard() {
 
@@ -21,6 +22,9 @@ function Dashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [userProfile, setUserProfile] = useState({ username: 'Loading...', email: '...' });
 
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
   const [formData, setFormData] = useState({ title: "", description: "", priority: "Low", due_date: "" });
 
   const fetchTasks = async () => {
@@ -30,6 +34,8 @@ function Dashboard() {
     } catch (error) {
       console.log(error);
       toast.error("Failed to fetch tasks");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,6 +57,7 @@ function Dashboard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
     try {
       const response = await API.post("/tasks/", formData);
       setTasks(prev => [response.data, ...prev]);
@@ -60,6 +67,8 @@ function Dashboard() {
     } catch (error) {
       console.log(error);
       toast.error("Failed to create task");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -106,17 +115,20 @@ function Dashboard() {
   const handleEditChange = (e) => setEditData({ ...editData, [e.target.name]: e.target.value });
 
   const handleUpdate = async (id) => {
+    setSubmitting(true);
     const prevTasks = tasks;
     setTasks(prev => prev.map(t => t.id === id ? { ...t, ...editData } : t));
     setEditingId(null);
-    setEditData({});
     try {
       await API.put(`/tasks/${id}/`, editData);
       toast.success("Task Updated Successfully");
+      setEditData({});
     } catch (error) {
       setTasks(prevTasks);
       setEditingId(id);
       toast.error("Failed to update task");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -166,7 +178,7 @@ function Dashboard() {
     return 0;
   });
 
-  const taskHandlers = { handleComplete, startEdit, handleDelete, handleEditChange, handleUpdate, cancelEdit, isOverdue, editingId, editData };
+  const taskHandlers = { handleComplete, startEdit, handleDelete, handleEditChange, handleUpdate, cancelEdit, isOverdue, editingId, editData, submitting };
 
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
@@ -248,7 +260,12 @@ function Dashboard() {
                     </button>
                   )}
                 </div>
-                {displayedTasks.length === 0 ? (
+                {loading ? (
+                  <div className="space-y-4">
+                    <SkeletonCard />
+                    <SkeletonCard />
+                  </div>
+                ) : displayedTasks.length === 0 ? (
                   <div className="text-center py-10 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
                     <p className="text-gray-500 font-medium">No tasks found. Create one to get started!</p>
                   </div>
@@ -273,7 +290,14 @@ function Dashboard() {
                   <span className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-bold">Pending: {pendingTasks}</span>
                 </div>
               </div>
-              {displayedTasks.length === 0 ? (
+              {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                </div>
+              ) : displayedTasks.length === 0 ? (
                 <div className="text-center py-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
                   <p className="text-gray-500 font-medium text-lg">No tasks found matching your search.</p>
                   <p className="text-gray-400 text-sm mt-2">Try adjusting your filters or create a new task.</p>
@@ -349,6 +373,7 @@ function Dashboard() {
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           onClose={() => setShowAddModal(false)}
+          submitting={submitting}
         />
       )}
 

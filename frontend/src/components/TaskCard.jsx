@@ -1,4 +1,4 @@
-export default function TaskCard({ task, editingId, editData, handleEditChange, handleUpdate, cancelEdit, handleComplete, startEdit, handleDelete, isOverdue }) {
+export default function TaskCard({ task, editingId, editData, handleEditChange, handleUpdate, cancelEdit, handleComplete, startEdit, handleDelete, isOverdue, submitting }) {
   const priorityClass = task.priority === 'High' ? 'bg-red-50 text-red-600' : task.priority === 'Medium' ? 'bg-yellow-50 text-yellow-600' : 'bg-green-50 text-green-600';
 
   return (
@@ -16,8 +16,10 @@ export default function TaskCard({ task, editingId, editData, handleEditChange, 
             <input type="date" name="due_date" value={editData.due_date} onChange={handleEditChange} className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg flex-1" />
           </div>
           <div className="flex gap-2">
-            <button onClick={() => handleUpdate(task.id)} className="px-4 py-2 bg-[#166534] text-white rounded-lg text-sm font-medium">Save Changes</button>
-            <button onClick={cancelEdit} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium">Cancel</button>
+            <button onClick={() => handleUpdate(task.id)} disabled={submitting} className="px-4 py-2 bg-[#166534] text-white rounded-lg text-sm font-medium disabled:opacity-50">
+              {submitting ? 'Updating...' : 'Save Changes'}
+            </button>
+            <button onClick={cancelEdit} disabled={submitting} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium disabled:opacity-50">Cancel</button>
           </div>
         </div>
       ) : (

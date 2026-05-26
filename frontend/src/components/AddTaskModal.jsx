@@ -1,4 +1,4 @@
-export default function AddTaskModal({ formData, handleChange, handleSubmit, onClose }) {
+export default function AddTaskModal({ formData, handleChange, handleSubmit, onClose, submitting }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
@@ -36,8 +36,10 @@ export default function AddTaskModal({ formData, handleChange, handleSubmit, onC
             </div>
           </div>
           <div className="flex gap-3 pt-4 border-t border-gray-50 mt-6">
-            <button type="button" onClick={onClose} className="flex-1 py-3 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all">Cancel</button>
-            <button type="submit" className="flex-1 py-3 px-4 bg-[#166534] hover:bg-green-800 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all">Create Task</button>
+            <button type="button" onClick={onClose} disabled={submitting} className="flex-1 py-3 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all disabled:opacity-50">Cancel</button>
+            <button type="submit" disabled={submitting} className="flex-1 py-3 px-4 bg-[#166534] hover:bg-green-800 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all disabled:opacity-50">
+              {submitting ? 'Creating...' : 'Create Task'}
+            </button>
           </div>
         </form>
       </div>

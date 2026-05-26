@@ -20,7 +20,7 @@ API.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const refresh = localStorage.getItem("refresh");
-        const res = await axios.post("http://127.0.0.1:8000/api/token/refresh/", {
+        const res = await axios.post("https://task-management-system-sixe.onrender.com/api/token/refresh/", {
           refresh,
         });
         localStorage.setItem("access", res.data.access);
