@@ -29,7 +29,10 @@ function Dashboard() {
 
   const fetchTasks = async () => {
     try {
-      const response = await API.get("/tasks/list/");
+      const [response] = await Promise.all([
+        API.get("/tasks/list/"),
+        new Promise(resolve => setTimeout(resolve, 2000)) // Enforce 2 second delay for skeleton
+      ]);
       setTasks(response.data);
     } catch (error) {
       console.log(error);
