@@ -242,7 +242,7 @@ function Dashboard() {
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-xl font-bold text-gray-800">Recent Tasks</h2>
-                  {displayedTasks.length > 5 && (
+                  {displayedTasks.length > 2 && (
                     <button onClick={() => setActiveTab('tasks')} className="text-sm font-bold text-green-700 hover:text-green-800 flex items-center gap-1">
                       View All <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
                     </button>
@@ -254,7 +254,7 @@ function Dashboard() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {[...displayedTasks].slice(0, 5).map(task => (
+                    {[...displayedTasks].slice(0, 2).map(task => (
                       <TaskCard key={task.id} task={task} {...taskHandlers} />
                     ))}
                   </div>
