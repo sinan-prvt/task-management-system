@@ -172,7 +172,7 @@ export default function Register() {
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
               />
               <label htmlFor="agreeTerms" className="ml-2 text-sm text-gray-600">
-                I agree to the <a href="#" className="text-blue-500 hover:underline">Terms and Conditions</a>
+                I agree to the <Link to="/terms" target="_blank" className="text-blue-500 hover:underline">Terms and Conditions</Link>
               </label>
             </div>
 
