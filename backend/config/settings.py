@@ -65,7 +65,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 
-# Use DATABASE_URL from .env if available (like Neon.tech), otherwise fallback to the old variables
 if os.getenv("DATABASE_URL"):
     DATABASES = {
         'default': dj_database_url.config(
