@@ -22,5 +22,10 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
-    
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['user', '-created_at']),
+            models.Index(fields=['user', 'completed']),
+        ]
+        ordering = ['-created_at']

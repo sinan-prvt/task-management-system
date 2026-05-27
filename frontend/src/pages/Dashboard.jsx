@@ -31,9 +31,9 @@ function Dashboard() {
     try {
       const [response] = await Promise.all([
         API.get("/tasks/list/"),
-        new Promise(resolve => setTimeout(resolve, 2000)) // Enforce 2 second delay for skeleton
+        new Promise(resolve => setTimeout(resolve, 2000))
       ]);
-      setTasks(response.data);
+      setTasks(response.data.results || response.data);
     } catch (error) {
       console.log(error);
       toast.error("Failed to fetch tasks");

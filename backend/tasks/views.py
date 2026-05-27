@@ -2,8 +2,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 from .models import Task
 from .serializers import TaskSerializer
+
+
+class TaskPagination(PageNumberPagination):
+    page_size = 50
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 
 class TaskCreateView(APIView):
@@ -22,12 +29,14 @@ class TaskCreateView(APIView):
 
 class TaskListView(APIView):
     permission_classes = [IsAuthenticated]
+    pagination_class = TaskPagination
 
     def get(self, request):
-        tasks = Task.objects.filter(user=request.user)
-        serializer = TaskSerializer(tasks, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        tasks = Task.objects.filter(user=request.user).order_by('-id')
+        paginator = self.pagination_class()
+        paginated_tasks = paginator.paginate_queryset(tasks, request)
+        serializer = TaskSerializer(paginated_tasks, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 
 
