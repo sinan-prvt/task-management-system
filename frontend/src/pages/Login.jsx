@@ -34,8 +34,9 @@ export default function Login() {
       navigate('/dashboard');
     } catch (err) {
       console.log(err);
-      setError('Invalid Credentials');
-      toast.error('Invalid Credentials');
+      const errorMsg = err.response?.data?.error || 'Invalid Credentials';
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }

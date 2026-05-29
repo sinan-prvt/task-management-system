@@ -1,7 +1,11 @@
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.MODE === "development"
+  ? "http://localhost:8000/api"
+  : "https://task-management-system-sixe.onrender.com/api";
+
 const API = axios.create({
-  baseURL: "https://task-management-system-sixe.onrender.com/api",
+  baseURL: API_BASE_URL,
 });
 
 API.interceptors.request.use((config) => {
@@ -20,9 +24,11 @@ API.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const refresh = localStorage.getItem("refresh");
-        const res = await axios.post("https://task-management-system-sixe.onrender.com/api/token/refresh/", {
-          refresh,
-        });
+        const refreshUrl = import.meta.env.MODE === "development"
+          ? "http://localhost:8000/api/token/refresh/"
+          : "https://task-management-system-sixe.onrender.com/api/token/refresh/";
+
+        const res = await axios.post(refreshUrl, { refresh });
         localStorage.setItem("access", res.data.access);
         API.defaults.headers.common["Authorization"] = `Bearer ${res.data.access}`;
         originalRequest.headers["Authorization"] = `Bearer ${res.data.access}`;
